@@ -494,6 +494,14 @@ int parsechar(unsigned char current_char)
                         case 'r':    //rotation
                                 rotation = tmpnum;
                                 tft.setRotation(rotation);
+                                if (rotation == 0 || rotation == 2) {   // Portrait mode
+                                        bottom_edge0 = RIGHT_EDGE320;
+                                        right_edge0 = BOTTOM_EDGE240;
+                                }
+                                else {                                  // Landscape mode
+                                        bottom_edge0 = BOTTOM_EDGE240;
+                                        right_edge0 = RIGHT_EDGE320;
+                                }
                                 break;
 
                         case 'm':
