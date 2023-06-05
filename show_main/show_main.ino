@@ -515,8 +515,8 @@ int parsechar(unsigned char current_char)
                                 }
                                 break;
 
-                        case 'z':
-                                if (tmpnum/10 == 4) {
+                        case 'z':                                       // Custom command, allows quick filling of background with colour. Works the 
+                                if (tmpnum/10 == 4) {                   // same as setting a background colour with the last letter changed to 'z'.
                                         backgroundColor = change_mColor(tmpnum%40);
                                         tft.setTextColor(foregroundColor, backgroundColor);
                                         tft.fillScreen(backgroundColor);
