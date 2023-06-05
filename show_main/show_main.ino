@@ -515,6 +515,14 @@ int parsechar(unsigned char current_char)
                                 }
                                 break;
 
+                        case 'z':
+                                if (tmpnum/10 == 4) {
+                                        backgroundColor = change_mColor(tmpnum%40);
+                                        tft.setTextColor(foregroundColor, backgroundColor);
+                                        tft.fillScreen(backgroundColor);
+                                }
+                                break;
+
                         case 'J':
                                 if (tmpnum == 2) {
                                         tft.fillScreen(ILI9340_BLACK);
