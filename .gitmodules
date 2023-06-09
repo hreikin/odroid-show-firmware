@@ -1,0 +1,21 @@
+[submodule "libraries/Adafruit_BME280_Library"]
+	path = libraries/Adafruit_BME280_Library
+	url = https://github.com/adafruit/Adafruit_BME280_Library
+[submodule "libraries/Adafruit_BMP085_Unified"]
+	path = libraries/Adafruit_BMP085_Unified
+	url = https://github.com/adafruit/Adafruit_BMP085_Unified
+[submodule "libraries/Adafruit-GFX-Library"]
+	path = libraries/Adafruit-GFX-Library
+	url = https://github.com/adafruit/Adafruit-GFX-Library
+[submodule "libraries/Adafruit_ILI9341"]
+	path = libraries/Adafruit_ILI9341
+	url = https://github.com/adafruit/Adafruit_ILI9341
+[submodule "libraries/Adafruit_Sensor"]
+	path = libraries/Adafruit_Sensor
+	url = https://github.com/adafruit/Adafruit_Sensor
+[submodule "libraries/TimerOne"]
+	path = libraries/TimerOne
+	url = https://github.com/PaulStoffregen/TimerOne
+[submodule "libraries/Adafruit_BusIO"]
+	path = libraries/Adafruit_BusIO
+	url = https://github.com/adafruit/Adafruit_BusIO
