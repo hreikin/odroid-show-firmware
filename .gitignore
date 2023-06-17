@@ -1,6 +1,13 @@
 # Project folders
 graphics_test/libraries/
 show_main/libraries/
+build/
+
+# VS Code
+.vscode/
+
+# Backup files
+*.old
 
 # Prerequisites
 *.d
