@@ -335,11 +335,15 @@ void setColours(uint16_t foreground = ILI9341_WHITE, uint16_t background = ILI93
 
 void resetDefaults()
 {
-  tft.setAddrWindow(0, 0, tft.width(), tft.height());
-  tft.fillScreen(ILI9341_BLACK);
   tft.setTextSize(2);
   tft.setRotation(1);
-  tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
+  setColours(ILI9341_WHITE, ILI9341_BLACK);
+  tft.fillScreen(ILI9341_BLACK);
+  setCursorXY();
+}
+
+void resetScreen() {
+  tft.fillScreen(backgroundColour);
   setCursorXY();
 }
 
