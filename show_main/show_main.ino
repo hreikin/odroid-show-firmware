@@ -405,25 +405,30 @@ void cursorRight(int columns = 1)
   setCursorXY((tft.getCursorX() + (columns * COLUMN_SIZE)), tft.getCursorY());
 }
 
-void setup()
-{
-  Serial.begin(500000);
-  Serial.println("Welcome to the Odroid-SHOW");
-
-  tft.begin();
-  initPins();
-  // show diagnostics over serial
-  showDiagnostics();
-
-  tft.setRotation(rotation);
-  tft.setTextSize(textSize);
+void showSplash() {
   setCursorXY(50, 50);
   tft.print("Hello ODROID-SHOW!");
   setCursorXY(250, 200);
   tft.print(version);
   delay(1000);
-  tft.fillScreen(backgroundColor);
-  setCursorXY(0, 0);
+  tft.fillScreen(backgroundColour);
+  setCursorXY();
+}
+void setup()
+{
+  // Init serial connection
+  Serial.begin(500000);
+  Serial.println("Welcome to the Odroid-SHOW");
+  // Init screen and pins
+  tft.begin();
+  initPins();
+  // show diagnostics over serial
+  showDiagnostics();
+  // Init defaults and show splash screen
+  tft.setRotation(currentRotation);
+  tft.setTextSize(currentTextSize);
+  showSplash();
+  // Init timer
   Timer1.initialize(20000);
   Timer1.attachInterrupt(timerCallback);
 }
