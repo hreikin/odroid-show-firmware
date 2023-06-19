@@ -219,22 +219,30 @@ void drawPixel(int16_t point_x, int16_t point_y, uint16_t colour)
   tft.drawPixel(point_x, point_y, colour);
 }
 
-int getMaxColumns()
+void setCursorColumnRow(int16_t col = 1, int16_t row = 1)
 {
-  int max_columns = tft.width() / COLUMN_SIZE;
-  return max_columns;
-}
+  // Ensure column and row are within the screen area
+  if (col >= 1 && col <= MAX_COLUMNS && row >= 1 and row <= MAX_ROWS)
+  {
+    cursor_prev.x = tft.getCursorX();
+    cursor_prev.y = tft.getCursorY();
 
-int getMaxRows()
+    tft.setCursor((col - 1) * COLUMN_SIZE, (row - 1) * ROW_SIZE);
+}
+  else
 {
-  int max_rows = tft.height() / ROW_SIZE;
-  return max_rows;
+    Serial.print(INVALID_POSITION_A);
+    Serial.print(col);
+    Serial.print(INVALID_POSITION_B);
+    Serial.print(row);
+    Serial.println(INVALID_POSITION_C);
+  }
 }
 
 void setCursorXY(int16_t x = 0, int16_t y = 0)
 {
   // Ensure x, y coordinates are within the screen dimensions
-  if (x >= LEFT_EDGE && x <= RIGHT_EDGE && y >= TOP_EDGE and y <= BOTTOM_EDGE)
+  if (x >= 0 && x <= RIGHT_EDGE && y >= 0 and y <= BOTTOM_EDGE)
   {
     cursor_prev.x = tft.getCursorX();
     cursor_prev.y = tft.getCursorY();
@@ -242,7 +250,11 @@ void setCursorXY(int16_t x = 0, int16_t y = 0)
   }
   else
   {
-    Serial.println("The x, y coordinates received are out of bounds.");
+    Serial.print(INVALID_POSITION_A);
+    Serial.print(x);
+    Serial.print(INVALID_POSITION_B);
+    Serial.print(y);
+    Serial.println(INVALID_POSITION_C);
   }
 }
 
