@@ -277,6 +277,62 @@ void reportCursorPosition()
   Serial.println(")");
 }
 
+uint16_t getNamedColour(int option)
+{
+  switch (option)
+  {
+  case 0:
+    return ILI9341_BLACK;
+  case 1:
+    return ILI9341_RED;
+  case 2:
+    return ILI9341_GREEN;
+  case 3:
+    return ILI9341_YELLOW;
+  case 4:
+    return ILI9341_BLUE;
+  case 5:
+    return ILI9341_MAGENTA;
+  case 6:
+    return ILI9341_CYAN;
+  case 7:
+    return ILI9341_WHITE;
+  case 8:
+    return ILI9341_NAVY;
+  case 9:
+    return ILI9341_DARKGREEN;
+  case 10:
+    return ILI9341_DARKCYAN;
+  case 11:
+    return ILI9341_MAROON;
+  case 12:
+    return ILI9341_PURPLE;
+  case 13:
+    return ILI9341_OLIVE;
+  case 14:
+    return ILI9341_LIGHTGREY;
+  case 15:
+    return ILI9341_DARKGREY;
+  case 16:
+    return ILI9341_ORANGE;
+  case 17:
+    return ILI9341_GREENYELLOW;
+  case 18:
+    return ILI9341_PINK;
+  }
+}
+
+uint16_t getRGBColours(uint16_t R, uint16_t G, uint16_t B)
+{
+  uint16_t RGB = ((R & 0xF8) << 8) | ((G & 0xFC) << 3) | ((B & 0xF8) >> 3);
+  return RGB;
+}
+
+void setColours(uint16_t foreground = ILI9341_WHITE, uint16_t background = ILI9341_BLACK)
+{
+  tft.setTextColor(foreground, background);
+}
+
 void resetDefaults()
 {
   tft.setAddrWindow(0, 0, tft.width(), tft.height());
