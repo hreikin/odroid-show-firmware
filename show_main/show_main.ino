@@ -28,15 +28,19 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);
 // If using the breakout, change pins as desired
 // Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
 
-#define LEFT_EDGE 0
 #define RIGHT_EDGE (tft.width() - 1)
-#define TOP_EDGE 0
 #define BOTTOM_EDGE (tft.height() - 1)
-#define COLUMN_SIZE (textSize * 6)
-#define ROW_SIZE (textSize * 8)
+#define COLUMN_SIZE (currentTextSize * 6)
+#define ROW_SIZE (currentTextSize * 8)
+#define MAX_COLUMNS (tft.width() / COLUMN_SIZE)
+#define MAX_ROWS (tft.height() / ROW_SIZE)
+#define CURRENT_COLUMN (tft.getCursorX() / COLUMN_SIZE)
+#define CURRENT_ROW (tft.getCursorY() / ROW_SIZE)
 #define SHOW_DEFAULT 1
-#define SHOW_IMAGE 5
-#define UNSUPPORTED_ESCAPE_SEQUENCE "Unsupported escape sequence received."
+#define SHOW_IMAGE 2
+#define INVALID_POSITION_A "Invalid (x, y): ("
+#define INVALID_POSITION_B ", "
+#define INVALID_POSITION_C ")"
 
 const char version[] = "v2.1";
 
@@ -51,10 +55,10 @@ cursor cursor_prev = {0, 0};
 
 uint8_t pwm = 255;
 uint8_t ledPin = 5; // PWM LED Backlight control to digital pin 5
-uint8_t textSize = 2;
-uint8_t rotation = 1;
-uint16_t foregroundColor = ILI9341_WHITE;
-uint16_t backgroundColor = ILI9341_BLACK;
+uint8_t currentTextSize = 2;
+uint8_t currentRotation = 1;
+uint16_t foregroundColour = ILI9341_WHITE;
+uint16_t backgroundColour = ILI9341_BLACK;
 uint32_t imgDelay = 0;
 uint32_t serialDelay = 0;
 uint8_t length = 0;
