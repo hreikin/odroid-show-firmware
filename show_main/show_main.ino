@@ -232,9 +232,9 @@ void setCursorColumnRow(int16_t col = 1, int16_t row = 1)
     cursor_prev.y = tft.getCursorY();
 
     tft.setCursor((col - 1) * COLUMN_SIZE, (row - 1) * ROW_SIZE);
-}
+  }
   else
-{
+  {
     Serial.print(INVALID_POSITION_A);
     Serial.print(col);
     Serial.print(INVALID_POSITION_B);
@@ -418,6 +418,111 @@ void showSplash() {
   tft.fillScreen(backgroundColour);
   setCursorXY();
 }
+
+int parseChar(unsigned char current_char)
+{
+  static enum {
+    STATE_NORMAL,
+    STATE_ESC,
+    STATE_CSI,
+    STATE_PRIVATE_MODE
+  } state = STATE_NORMAL;
+
+  static int numeric_params[6];  // Array to store numeric parameters
+  static int param_index = 0;  // Current index in the numeric_params array
+
+  switch (state) {
+    case STATE_NORMAL:
+      if (current_char == '\033') {
+        state = STATE_ESC;
+        return 0;
+      }
+      else {
+        // Handle regular characters here
+        return current_char;
+      }
+      break;
+
+    case STATE_ESC:
+      if (current_char == '[') {
+        param_index = 0;  // Reset the parameter index
+        for (int i = 0; i < 6; i++) {
+          numeric_params[i] = 0;  // Reset the numeric parameters
+        }
+        state = STATE_CSI;
+        return 0;
+      }
+      else if (current_char == '#') {
+        state = STATE_PRIVATE_MODE;
+        return 0;
+      }
+      else if (current_char == 'c') {
+        resetScreen();
+        state = STATE_NORMAL;
+        return 0;
+      }
+      else {
+        // Handle unsupported escape sequences here
+        Serial.print("Invalid ESC sequence.");
+        state = STATE_NORMAL;
+      }
+      break;
+
+    case STATE_CSI:
+      if (current_char >= '0' && current_char <= '9') {
+        // Accumulate the numeric parameter
+        if (numeric_params[param_index] == 0) {
+          numeric_params[param_index] = current_char - '0';
+        }
+        else {
+          numeric_params[param_index] = numeric_params[param_index] * 10 + (current_char - '0');
+        }
+        return 0;
+      }
+      else if (current_char == ';') {
+        // Separator between numeric parameters
+        param_index++;
+        return 0;
+      }
+      else {
+        // Handle CSI sequences here
+        // e.g., CSI code: ESC [ <n> ; <m> ... <command>
+        // Access the numeric parameters through the 'numeric_params' array
+        // Example usage: int param1 = numeric_params[0];
+        //                int param2 = numeric_params[1];
+        if (current_char == 'H' || current_char == 'f') {
+          if (param_index == 0) {
+            setCursorXY();
+          }
+          else if (current_char == 'H') {
+            setCursorXY(numeric_params[0], numeric_params[1]);
+          }
+          else if (current_char == 'f') {
+            setCursorColumnRow(numeric_params[0], numeric_params[1]);
+          }
+          state = STATE_NORMAL;
+          return 0;
+        }
+        else if (current_char == 'r') {
+          tft.setRotation(numeric_params[0]);
+          state = STATE_NORMAL;
+          return 0;
+        }
+        // Handle unsupported escape sequences here
+        Serial.print("Invalid CSI sequence.");
+        state = STATE_NORMAL;
+      }
+      break;
+
+    case STATE_PRIVATE_MODE:
+      // Handle private-mode sequences here
+      // e.g., private-mode code: ESC # <n> ...
+      // Refer to Linux console documentation for the codes
+      state = STATE_NORMAL;
+      break;
+  }
+}
+
 void setup()
 {
   // Init serial connection
@@ -465,10 +570,13 @@ void loop(void)
   }
   else
   {
-    if (Serial.available() > 0)
+    while (Serial.available())
     {
       c = Serial.read();
-      tft.print((char)c);
+      if (parseChar(c) > 0)
+      {
+        tft.print((char)c);
+      }
     }
   }
 }
